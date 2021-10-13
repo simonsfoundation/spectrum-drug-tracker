@@ -13,9 +13,9 @@ from Bio import Entrez
 from Bio import Medline
 
 # Clean the autism trials .csv file, argument = location/name of file. 
-df = clean_csv('autism_trials.csv')
+df = clean_csv('datasets/autism_trials.csv')
 print(len(df))
-df.to_csv('autism_drug_trials.csv')
+df.to_csv('datasets/autism_drug_trials.csv')
 
 '''Overwrite DF, in a new column, if papers exist. List papers separated by '|'
 '''
