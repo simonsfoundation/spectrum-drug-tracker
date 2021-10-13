@@ -3,6 +3,8 @@ TODO:
 Add for loop to make additional requests, and append all lists as needed. Store for loop in a dictionary to run more easily. 
 Compartmentalize code. 
 Update DataFrame column with date that the script was run
+Do sanity checks on my own scripts by manually doing these searches on clinicaltrials.gov, etc. Why are phases so infrequently listed, for example?
+Transition to a Jupyter notebook?
 '''
 
 import numpy as np
@@ -19,9 +21,6 @@ import time
 
 '''
 SECTION 1: RETRIEVE ALL CLINICAL TRIALS FOR AUTISM AND AUTISM-RELATED CONDITIONS
-'''
-'''
-Conditions to include:
 -- Autism + other terms
 -- Fragile X
 -- Rett syndrome
@@ -35,17 +34,15 @@ Conditions to include:
 -- 16p deletion syndrome
 -- 16p duplication syndrome
 '''
+
 # Set a search expression, spaces are denoted as '+', but Boolean logic can still be used. 
 search_terms = """autism+OR+autism+spectrum+disorder+OR+Fragile+X+OR+Rett+syndrome+OR+tuberous+sclerosis+OR+Williams+syndrome+OR+
                 Praeder+Willi+syndrome+OR+Phelan+McDermid+syndrome+OR+Dup15q+OR+Angelman+OR+Timothy+syndrome+OR+16p+deletion+OR+16p+duplication"""
 
-# Set base URL to make a request. 
-min_rank = 1
-max_rank = 5
 search_fields_1 = ("""Acronym,ArmGroupDescription,ArmGroupInterventionName,ArmGroupLabel,ArmGroupType,BriefSummary,BriefTitle,CentralContactName,CompletionDate,
-                CompletionDateType,Condition,ConditionMeshTerm,DesignAllocation,DesignInterventionModel,
-                DesignInterventionModelDescription,DesignMasking,DesignMaskingDescription,
-                DesignObservationalModel,DesignPrimaryPurpose,DesignWhoMasked""").replace(',','%2C')
+                    CompletionDateType,Condition,ConditionMeshTerm,DesignAllocation,DesignInterventionModel,
+                    DesignInterventionModelDescription,DesignMasking,DesignMaskingDescription,
+                    DesignObservationalModel,DesignPrimaryPurpose,DesignWhoMasked""").replace(',','%2C')
 
 search_fields_2 = ("""DetailedDescription,
                 DispFirstSubmitDate,EligibilityCriteria,EnrollmentCount,EnrollmentType,Gender,
@@ -57,36 +54,55 @@ search_fields_3 = ("""OrgClass,OrgFullName,OrgStudyId,OutcomeMeasureDescription,
                 OutcomeMeasureTitle,OutcomeMeasureType,Phase,ReferenceCitation,ReferencePMID,ResponsiblePartyInvestigatorAffiliation,
                 ResponsiblePartyInvestigatorFullName,ResponsiblePartyInvestigatorTitle,ResponsiblePartyOldOrganization,
                 ResponsiblePartyOldNameTitle,ResultsFirstSubmitDate,StudyPopulation,StudyType""").replace(',','%2C')
-    
-format_type = 'csv'
-base_url_1 = f"https://clinicaltrials.gov/api/query/study_fields?expr={search_terms}&fields={search_fields_1}&min_rnk={min_rank}&max_rnk={max_rank}&fmt={format_type}"
-base_url_2 = f"https://clinicaltrials.gov/api/query/study_fields?expr={search_terms}&fields={search_fields_2}&min_rnk={min_rank}&max_rnk={max_rank}&fmt={format_type}"
-base_url_3 = f"https://clinicaltrials.gov/api/query/study_fields?expr={search_terms}&fields={search_fields_3}&min_rnk={min_rank}&max_rnk={max_rank}&fmt={format_type}"
 
-# For loop that retrieves studies beyond the max_studies=100 limit. 
 headers = {"User-Agent": "Mozilla/5.0 (X11; CrOS x86_64 12871.102.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.141 Safari/537.36"}
-response_1 = requests.get(base_url_1, headers=headers).content
-time.sleep(10)
-available_studies = response_1.find("NStudiesFound:")
+format_type = 'csv'
 
-response_2 = requests.get(base_url_2, headers=headers).content
-time.sleep(10)
-response_3 = requests.get(base_url_3, headers=headers).content
+min_rank = 1
+max_rank = 1000
 
-df1 = pd.read_csv(io.StringIO(response_1.decode('utf-8')), error_bad_lines=False, skiprows=10)
-df2 = pd.read_csv(io.StringIO(response_2.decode('utf-8')), error_bad_lines=False, skiprows=10)
-df3 = pd.read_csv(io.StringIO(response_3.decode('utf-8')), error_bad_lines=False, skiprows=10)
+def compile_df():
+    base_url_1 = f"https://clinicaltrials.gov/api/query/study_fields?expr={search_terms}&fields={search_fields_1}&min_rnk={min_rank}&max_rnk={max_rank}&fmt={format_type}"
+    base_url_2 = f"https://clinicaltrials.gov/api/query/study_fields?expr={search_terms}&fields={search_fields_2}&min_rnk={min_rank}&max_rnk={max_rank}&fmt={format_type}"
+    base_url_3 = f"https://clinicaltrials.gov/api/query/study_fields?expr={search_terms}&fields={search_fields_3}&min_rnk={min_rank}&max_rnk={max_rank}&fmt={format_type}"
+    
+    response_1 = requests.get(base_url_1, headers=headers).content
+    time.sleep(1)
+    response_2 = requests.get(base_url_2, headers=headers).content
+    time.sleep(1)
+    response_3 = requests.get(base_url_3, headers=headers).content
 
-df = pd.concat((df1, df2, df3), axis=1)
+    df1 = pd.read_csv(io.StringIO(response_1.decode('utf-8')), error_bad_lines=False, skiprows=10)
+    df2 = pd.read_csv(io.StringIO(response_2.decode('utf-8')), error_bad_lines=False, skiprows=10)
+    df3 = pd.read_csv(io.StringIO(response_3.decode('utf-8')), error_bad_lines=False, skiprows=10)
 
-# REGEX TO FIND NUMBER OF AVAILABLE STUDIES
+    return df1, df2, df3
+
+# df1, df2, df3 = compile_df()
+# df_x = pd.concat((df1, df2, df3), axis=1)
+
+# min_rank += 1000
+# max_rank += 1000
+# df1, df2, df3 = compile_df()
+# df_y = pd.concat((df1, df2, df3), axis=1)
+
+# min_rank += 1000
+# max_rank += 1000
+# df1, df2, df3 = compile_df()
+# df_z = pd.concat((df1, df2, df3), axis=1)
+
+# min_rank += 1000
+# max_rank += 1000
+# df1, df2, df3 = compile_df()
+# df_xy = pd.concat((df1, df2, df3), axis=1)
+
+# df = df_x.append(df_y, df_z, df_xy)
+# print(len(df))
+# print(df.head(5))
+# print(df.tail(20))
+
 # ADD FOR LOOP TO GO THROUGH MORE RANKS, BASED ON NUMBER OF AVAILABLE STUDIES
 
-# df = pd.read_csv(response)
-# len(df)
-
-# data = dictr['FullStudiesResponse']
-# print("Number of studies in search: " + str(data['NStudiesFound']))
 
 '''
 TODO:
