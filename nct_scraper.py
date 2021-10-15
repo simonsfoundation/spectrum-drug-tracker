@@ -1,6 +1,6 @@
 '''
 TODO:
-Decide on 'final categories' that we want to pull
+Decide on 'final categories' that we want to pull -- I look at A through L
 Compartmentalize code. 
 Update DataFrame column with date that the script was run
 Do sanity checks on my own scripts by manually doing these searches on clinicaltrials.gov, etc. Why are phases so infrequently listed, for example?
@@ -73,6 +73,8 @@ Indication / what it’s supposed to treat
 Location of trial
 
 '''
+# DATE OF LAST SCRIPT EXECUTION
+prior_date = pd.to_datetime("October 14, 2021")
 
 # Set a search expression, spaces are denoted as '+', but Boolean logic can still be used. 
 search_terms = """autism+OR+autism+spectrum+disorder+OR+Fragile+X+OR+Rett+syndrome+OR+tuberous+sclerosis+OR+Williams+syndrome+OR+
