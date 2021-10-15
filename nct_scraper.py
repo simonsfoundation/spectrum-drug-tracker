@@ -225,7 +225,7 @@ print(df.head(5))
 print(df.tail(5))
 
 #MOVE THIS DOWN, AFTER APPENDING DOI?
-df.to_csv('20211015_drug_trials_unfiltered.csv')
+df.to_csv('datasets/20211015_drug_trials_unfiltered.csv')
 
 # df.to_csv('unfiltered_trials_all_conditions.csv')
 
