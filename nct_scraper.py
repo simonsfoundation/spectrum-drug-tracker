@@ -226,11 +226,34 @@ print(len(df))
 print(df.head(5))
 print(df.tail(5))
 
-#MOVE THIS DOWN, AFTER APPENDING DOI?
-df.to_csv('datasets/20211015_drug_trials_unfiltered.csv')
+# Create an unfiltered .csv file 
+# df.to_csv('datasets/20211015_drug_trials_unfiltered.csv')
 
-# df.to_csv('unfiltered_trials_all_conditions.csv')
+# Clean the .csv file, according to our filter criteria 
+df = pd.read_csv('./datasets/20211015_drug_trials_unfiltered.csv')
 
+# First, remove all trials that do not have a 'Phase' explicitly listed 
+df_phase = df[df['Phase'].notna()]
 
+# Remove trials that say 'Not Applicable' for Phase data. 
+df_phase = df_phase[~df_phase['Phase'].str.contains("Applicab")]
 
+# Remove Phase 1 clinical trials 
+df_phase = df_phase[~df_phase['Phase'].str.contains("1")]
+
+# Remove trials that do not include 'drug' as an intervention type 
+df_phase_drugs = df_phase[df_phase['InterventionType'].str.contains("Drug")]
+
+# Perform extra filtering, as some trials appear for certain lymphomas, etc. 
+targets = ['Autis', 'autis', 'Rett', 'Angelman', 'uberous', 'Phelan', '15q', 'Fragile X', 'Asperger', 'Williams', 'Pervasive Developmental Disorder']
+extra_filter_mask = df_phase_drugs['ConditionBrowseLeafAsFound'].str.contains('Autis|autis|Rett|Angelman|uberous|Phelan|15q|Fragile X|Asperger|Williams|Pervasive Developmental Disorder', regex=True, na=False)
+s = pd.Series(extra_filter_mask)
+df_phase_drugs_extra_filter = df_phase_drugs[s.values]
+
+# Populate a placebo column automatically, based solely on ArmGroupInterventionName column (maybe not flawless)
+df_phase_drugs_extra_filter['Placebo'] = df_phase_drugs_extra_filter['ArmGroupInterventionName'].apply(lambda x: 'Yes' if 'Placebo' in str(x) else 'No')
+
+# Identify NEW studies
+
+# Export DataFrame to csv 
 ''''''
