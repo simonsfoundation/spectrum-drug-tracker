@@ -1,103 +1,18 @@
-'''
-TODO:
-Decide on 'final categories' that we want to pull -- I look at A through L
-Compartmentalize code. 
-Update DataFrame column with date that the script was run
-Do sanity checks on my own scripts by manually doing these searches on clinicaltrials.gov, etc. Why are phases so infrequently listed, for example?
-Transition to a Jupyter notebook?
-Clean up code, obviously. Terrible approach. 
-Add code to find "new" entries, based on whether NCTId exists, and when LastUpdate was posted, etc. Find way to highlight those (e.g. new updated column, export to new csv with JUST what's new...)
-Search PubMed for NCTId and append DOIs to new column if papers exist?
-
-I need to write a function that checks for NCTId and date of last update, and flags the study AFTER Pandas filtering if there's still something new. Rest is filled in manually. 
-'''
-
+# Imports
 import numpy as np
 import pandas as pd
 from functions import *
-from bs4 import BeautifulSoup
 import requests
-import json
 import re
-from Bio import Entrez
-from Bio import Medline
 import io
 import time
+import csv
+from datetime import datetime as dt
 
-'''
-SECTION 1: RETRIEVE ALL CLINICAL TRIALS FOR AUTISM AND AUTISM-RELATED CONDITIONS
--- Autism + other terms
--- Fragile X
--- Rett syndrome
--- Tuberous sclerosis
--- Williams syndrome
--- Praeder Willi syndrome
--- Phelan McDermid syndrome
--- Dup15q syndrome 
--- Angelman syndrome
--- Timothy syndrome
--- 16p deletion syndrome
--- 16p duplication syndrome
-
-TODO:
-Descriptive summary of each drug
-Clinical indication for the trial; e.g. core autism trait, co-occurring symptom, etc.
-Mechanism of action (e.g. ‘blocks the dopamine D-2 receptor’)
-When the trial ended
-Whether drug has already been approved for something else and, if so, what. 
-Trial design (e.g. Double blind, randomized, placebo, etc.)
-Broad class of drug (e.g. antipsychotic, antidepressant)
-Link to PubMed papers that include NCT number, where possible
-(Optional: Number of intervention doses given in the trial)
-
-COMPLETED:
-Name of drug
-Type of drug (e.g. biological)
-Index (via Rank)
-NCT number
-Condition designed to treat (e.g. autism, Phelan McDermid syndrome…)
-Phase of trial
-Name of trial
-When the trial began
-Last trial update
-Design intervention model
-Design Allocation
-Design Masking
-Name of organization
-Brief summary of trial
-Detailed description of trial
-Intervention description
-Overall Status (e.g. Recruiting)
-How many people were enrolled
-Outcome measures
-Minimum age
-Maximum age
-Indication / what it’s supposed to treat
-Location of trial
-'''
-
-'''
-STUDY FIELDS:
-Acronym,ArmGroupDescription,ArmGroupInterventionName,ArmGroupLabel,ArmGroupType,BriefSummary,BriefTitle,CentralContactEMail,CentralContactName,CentralContactRole,
-CompletionDate,CompletionDateType,Condition,ConditionBrowseLeafAsFound,ConditionMeshId,ConditionMeshTerm,DesignAllocation,DesignInterventionModel,DesignMasking,
-DesignObservationalModel,DesignPrimaryPurpose,DesignTimePerspective,DesignWhoMasked,DetailedDescription,DispFirstPostDate,DispFirstPostDateType,DispFirstSubmitDate,DispFirstSubmitQCDate,
-EligibilityCriteria,EnrollmentCount,EnrollmentType,EventGroupDeathsNumAffected,EventGroupDeathsNumAtRisk,EventsFrequencyThreshold,EventsTimeFrame,FDAAA801Violation,Gender,HealthyVolunteers,
-IPDSharing,InterventionArmGroupLabel,InterventionDescription,InterventionName,InterventionOtherName,InterventionType,IsFDARegulatedDrug,LastKnownStatus,LastUpdatePostDate,LastUpdatePostDateType,LastUpdateSubmitDate,
-LeadSponsorClass,LeadSponsorName,LocationCity,LocationContactEMail,LocationContactName,LocationCountry,LocationFacility,LocationState,LocationStatus,MaximumAge,MinimumAge,
-NCTId,OfficialTitle,OrgClass,OrgFullName,OtherEventStatsNumAffected,OtherEventStatsNumAtRisk,OtherEventStatsNumEvents,OtherEventTerm,OtherOutcomeDescription,OtherOutcomeMeasure,OtherOutcomeTimeFrame,
-OutcomeAnalysisCILowerLimit,OutcomeAnalysisCINumSides,OutcomeAnalysisCIPctValue,OutcomeAnalysisCIUpperLimit,OutcomeAnalysisDispersionType,OutcomeAnalysisDispersionValue,
-OutcomeAnalysisPValue,OutcomeAnalysisParamType,OutcomeAnalysisParamValue,OutcomeAnalysisStatisticalMethod,OutcomeClassDenomCountValue,OutcomeDenomCountValue,
-OutcomeDenomUnits,OutcomeGroupDescription,OutcomeGroupTitle,OutcomeMeasureDescription,OutcomeMeasureDispersionType,OutcomeMeasureParamType,OutcomeMeasurePopulationDescription,OutcomeMeasureReportingStatus,OutcomeMeasureTimeFrame,OutcomeMeasureTitle,OutcomeMeasureType,
-OutcomeMeasurementValue,OutcomeMeasureUnitOfMeasure,OutcomeMeasurementLowerLimit,OutcomeMeasurementSpread,OutcomeMeasurementUpperLimit,OverallOfficialAffiliation,OverallOfficialName,OverallOfficialRole,OverallStatus,
-OversightHasDMC,Phase,PointOfContactEMail,PointOfContactOrganization,PointOfContactTitle,PrimaryCompletionDate,PrimaryCompletionDateType,PrimaryOutcomeDescription,PrimaryOutcomeMeasure,PrimaryOutcomeTimeFrame,
-ReferenceCitation,ReferencePMID,ResponsiblePartyInvestigatorAffiliation,ResponsiblePartyInvestigatorFullName,ResponsiblePartyInvestigatorTitle,ResponsiblePartyType,
-ResultsFirstPostDate,ResultsFirstPostDateType,ResultsFirstSubmitDate,ResultsFirstSubmitQCDate,SamplingMethod,SecondaryId,SecondaryIdType,SecondaryIdDomain,SecondaryIdLink,
-SecondaryOutcomeDescription,SecondaryOutcomeMeasure,SecondaryOutcomeTimeFrame,SeriousEventAssessmentType,SeriousEventNotes,SeriousEventStatsNumAffected,SeriousEventStatsNumAtRisk,SeriousEventStatsNumEvents,SeriousEventTerm,
-StartDate,StartDateType,StatusVerifiedDate,StdAge,StudyFirstPostDate,StudyFirstPostDateType,StudyFirstSubmitDate,StudyFirstSubmitQCDate,StudyPopulation,StudyType,VersionHolder,WhyStopped
-'''
-
-# DATE OF LAST SCRIPT EXECUTION
-prior_date = pd.to_datetime("October 15, 2021")
+# ENTER DATES IN YYYYMMDD FORMAT.
+current_date = dt.today().strftime('%-d-%b-%y')
+print(f"The date today is: {str(current_date)}")
+prior_date = str(20211015)
 
 # Set a search expression, spaces are denoted as '+', but Boolean logic can still be used. 
 search_terms = """autism+OR+autism+spectrum+disorder+OR+Fragile+X+OR+Rett+syndrome+OR+tuberous+sclerosis+OR+Williams+syndrome+OR+
@@ -221,16 +136,15 @@ print("Max rank set to: " + str(max_rank))
 print("Length of df_z: " + str(len(df_z)))
 
 df = pd.concat([df_x, df_y, df_z], sort=False)
-df = df.reset_index()
-print(len(df))
-print(df.head(5))
-print(df.tail(5))
+df.reset_index(inplace=True)
+
+'''
+DATA FILTERING
+'''
 
 # Create an unfiltered .csv file 
-# df.to_csv('datasets/20211015_drug_trials_unfiltered.csv')
-
-# Clean the .csv file, according to our filter criteria 
-df = pd.read_csv('./datasets/20211015_drug_trials_unfiltered.csv')
+current_date_formatted = dt.strptime(current_date, '%d-%b-%y').strftime('%Y%m%d')
+df.to_csv(f'datasets/{str(current_date_formatted)}_drug_trials_unfiltered.csv')
 
 # First, remove all trials that do not have a 'Phase' explicitly listed 
 df_phase = df[df['Phase'].notna()]
@@ -242,7 +156,7 @@ df_phase = df_phase[~df_phase['Phase'].str.contains("Applicab")]
 df_phase = df_phase[~df_phase['Phase'].str.contains("1")]
 
 # Remove trials that do not include 'drug' as an intervention type 
-df_phase_drugs = df_phase[df_phase['InterventionType'].str.contains("Drug")]
+df_phase_drugs = df_phase[df_phase['InterventionType'].str.contains("Drug", na=False)]
 
 # Perform extra filtering, as some trials appear for certain lymphomas, etc. 
 targets = ['Autis', 'autis', 'Rett', 'Angelman', 'uberous', 'Phelan', '15q', 'Fragile X', 'Asperger', 'Williams', 'Pervasive Developmental Disorder']
@@ -253,7 +167,30 @@ df_phase_drugs_extra_filter = df_phase_drugs[s.values]
 # Populate a placebo column automatically, based solely on ArmGroupInterventionName column (maybe not flawless)
 df_phase_drugs_extra_filter['Placebo'] = df_phase_drugs_extra_filter['ArmGroupInterventionName'].apply(lambda x: 'Yes' if 'Placebo' in str(x) else 'No')
 
-# Identify NEW studies
+# Export to a .csv file, name it as 'master' with the current date.
+df_phase_drugs_extra_filter.to_csv(f'datasets/{str(current_date_formatted)}_drug_trials_master.csv')
 
-# Export DataFrame to csv 
-''''''
+df_new = df_phase_drugs_extra_filter
+
+# Read in the previous DataFrame. 
+df_old = pd.read_csv(f'./datasets/{prior_date}_drug_trials_master.csv')
+
+# Identify NEW studies, based on NCTId. 
+df_new_NCTIds = df_new[~df_new['NCTId'].isin(df_old['NCTId'])]
+print(df_new_NCTIds)
+
+# Find studies that have been updated, using the df_new database and date ranges. 
+df_new['LastUpdatePostDate'] = df_new['LastUpdatePostDate'].astype('datetime64[ns]')
+old_date = dt.strptime(prior_date, '%Y%m%d').strftime('%-d-%b-%y')
+
+print(f'The old date displays like this: {old_date}')
+
+date_mask = df_new['LastUpdatePostDate'] > old_date
+print(date_mask)
+df_updated_trials = df_new.loc[date_mask]
+print(f"The length of df_updated_trials is: {len(df_updated_trials)}")
+print(f"The length of df_new_NCTIds is: {len(df_new_NCTIds)}")
+
+
+df_updated_trials.to_csv(f'./datasets/{current_date_formatted}_updated_trials.csv', encoding='utf-8')
+df_new_NCTIds.to_csv(f'./datasets/{current_date_formatted}_new_trials.csv', encoding='utf-8')
