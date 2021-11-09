@@ -11,30 +11,29 @@ from datetime import datetime as dt
 search_terms = """autism+OR+autism+spectrum+disorder+OR+Fragile+X+OR+Rett+syndrome+OR+tuberous+sclerosis+OR+Williams+syndrome+OR+
                 Praeder+Willi+syndrome+OR+Phelan+McDermid+syndrome+OR+Dup15q+OR+Angelman+OR+Timothy+syndrome+OR+16p+deletion+OR+16p+duplication"""
 
-search_fields_1 = ("""Acronym,ArmGroupDescription,ArmGroupInterventionName,ArmGroupLabel,ArmGroupType,BriefSummary,BriefTitle,CentralContactEMail,CentralContactName,CentralContactRole,
-CompletionDate,CompletionDateType,Condition,ConditionBrowseLeafAsFound,ConditionMeshId,ConditionMeshTerm,DesignAllocation,DesignInterventionModel,DesignMasking,DesignObservationalModel""").replace(',','%2C')
+search_fields_1 = ("""NCTId,Acronym,ArmGroupDescription,ArmGroupInterventionName,ArmGroupLabel,ArmGroupType,BriefSummary,BriefTitle,CentralContactEMail,CentralContactName,
+CompletionDate,CompletionDateType,Condition,ConditionBrowseLeafAsFound,ConditionMeshId,ConditionMeshTerm,DesignAllocation,DesignInterventionModel,DesignMasking""").replace(',','%2C')
 
-search_fields_2 = ("""DesignPrimaryPurpose,DesignTimePerspective,DesignWhoMasked,DetailedDescription,DispFirstPostDate,DispFirstPostDateType,DispFirstSubmitDate,DispFirstSubmitQCDate,
+search_fields_2 = ("""DesignObservationalModel,DesignPrimaryPurpose,DesignWhoMasked,DetailedDescription,DispFirstPostDate,DispFirstPostDateType,DispFirstSubmitDate,DispFirstSubmitQCDate,
 EligibilityCriteria,EnrollmentCount,EnrollmentType,EventGroupDeathsNumAffected,EventGroupDeathsNumAtRisk,EventsFrequencyThreshold,EventsTimeFrame,FDAAA801Violation,Gender,HealthyVolunteers,
 IPDSharing,InterventionArmGroupLabel""").replace(',','%2C')
 
 search_fields_3 = ("""InterventionDescription,InterventionName,InterventionOtherName,InterventionType,IsFDARegulatedDrug,LastKnownStatus,LastUpdatePostDate,LastUpdatePostDateType,LastUpdateSubmitDate,
 LeadSponsorClass,LeadSponsorName,LocationCity,LocationContactEMail,LocationContactName,LocationCountry,LocationFacility,LocationState,LocationStatus,MaximumAge,MinimumAge""").replace(',','%2C')
 
-search_fields_4 = ("""NCTId,OfficialTitle,OrgClass,OrgFullName,OtherEventStatsNumAffected,OtherEventStatsNumAtRisk,OtherEventStatsNumEvents,OtherEventTerm,OtherOutcomeDescription,OtherOutcomeMeasure,OtherOutcomeTimeFrame,OutcomeAnalysisCILowerLimit,OutcomeAnalysisCINumSides,OutcomeAnalysisCIPctValue,OutcomeAnalysisCIUpperLimit,OutcomeAnalysisDispersionType,OutcomeAnalysisDispersionValue,
+search_fields_4 = ("""OfficialTitle,OrgClass,OrgFullName,OtherEventStatsNumAffected,OtherEventStatsNumAtRisk,OtherEventStatsNumEvents,OtherEventTerm,OtherOutcomeDescription,OtherOutcomeMeasure,OtherOutcomeTimeFrame,OutcomeAnalysisCILowerLimit,OutcomeAnalysisCINumSides,OutcomeAnalysisCIPctValue,OutcomeAnalysisCIUpperLimit,OutcomeAnalysisDispersionType,OutcomeAnalysisDispersionValue,
 OutcomeAnalysisPValue,OutcomeAnalysisParamType,OutcomeAnalysisParamValue""").replace(',','%2C')
 
 search_fields_5 = ("""OutcomeAnalysisStatisticalMethod,OutcomeClassDenomCountValue,OutcomeDenomCountValue,
 OutcomeDenomUnits,OutcomeGroupDescription,OutcomeGroupTitle,OutcomeMeasureDescription,OutcomeMeasureDispersionType,OutcomeMeasureParamType,OutcomeMeasurePopulationDescription,
 OutcomeMeasureReportingStatus,OutcomeMeasureTimeFrame,OutcomeMeasureTitle,OutcomeMeasureType,OutcomeMeasurementValue,OutcomeMeasureUnitOfMeasure,OutcomeMeasurementLowerLimit,OutcomeMeasurementSpread,OutcomeMeasurementUpperLimit,OverallOfficialAffiliation""").replace(',','%2C')
 
-search_fields_6 = ("""OverallOfficialName,OverallOfficialRole,OverallStatus,
-OversightHasDMC,Phase,PointOfContactEMail,PointOfContactOrganization,PointOfContactTitle,PrimaryCompletionDate,PrimaryCompletionDateType,PrimaryOutcomeDescription,PrimaryOutcomeMeasure,PrimaryOutcomeTimeFrame,
+search_fields_6 = ("""OverallStatus,
+OversightHasDMC,Phase,PrimaryCompletionDate,PrimaryCompletionDateType,PrimaryOutcomeDescription,PrimaryOutcomeMeasure,PrimaryOutcomeTimeFrame,
 ReferenceCitation,ReferencePMID,ResponsiblePartyInvestigatorAffiliation,ResponsiblePartyInvestigatorFullName,ResponsiblePartyInvestigatorTitle,ResponsiblePartyType,
 ResultsFirstPostDate""").replace(',','%2C')
 
-search_fields_7 = ("""ResultsFirstPostDateType,ResultsFirstSubmitDate,ResultsFirstSubmitQCDate,SamplingMethod,SecondaryId,
-SecondaryIdType,SecondaryIdDomain,SecondaryIdLink,SecondaryOutcomeDescription,SecondaryOutcomeMeasure,SecondaryOutcomeTimeFrame,SeriousEventAssessmentType,SeriousEventNotes,SeriousEventStatsNumAffected,SeriousEventStatsNumAtRisk,SeriousEventStatsNumEvents,SeriousEventTerm,
+search_fields_7 = ("""ResultsFirstPostDateType,ResultsFirstSubmitDate,ResultsFirstSubmitQCDate,SecondaryOutcomeDescription,SecondaryOutcomeMeasure,SecondaryOutcomeTimeFrame,SeriousEventAssessmentType,SeriousEventNotes,SeriousEventStatsNumAffected,SeriousEventStatsNumAtRisk,SeriousEventStatsNumEvents,SeriousEventTerm,
 StartDate,StartDateType,StatusVerifiedDate""").replace(',','%2C')
 
 search_fields_8 = ("""StdAge,StudyFirstPostDate,StudyFirstPostDateType,StudyFirstSubmitDate,StudyFirstSubmitQCDate,StudyPopulation,StudyType,VersionHolder,WhyStopped""").replace(',','%2C')
