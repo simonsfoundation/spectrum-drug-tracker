@@ -13,7 +13,7 @@ from datetime import datetime as dt
 current_date = dt.today().strftime('%-d-%b-%y')
 current_date_formatted = dt.strptime(current_date, '%d-%b-%y').strftime('%Y%m%d')
 print(f"The date today is: {str(current_date)}")
-prior_date = str(20211015)
+prior_date = str(20211108)
 
 df_x, df_y, df_z = build_dataframes()
 df = pd.concat([df_x, df_y, df_z], sort=False)
