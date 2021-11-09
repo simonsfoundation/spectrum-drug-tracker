@@ -97,7 +97,7 @@ def build_dataframes():
     print("Max rank set to: " + str(max_rank))
 
     df1x, df2x, df3x, df4x, df5x, df6x, df7x, df8x = compile_df(min_rank, max_rank)
-    df_x = pd.concat((df1x, df2x, df3x, df4x, df5x, df6x, df7x, df8x), axis=1) # First 1000 studies
+    df_x = pd.concat((df1x, df2x, df3x, df4x, df5x, df6x, df7x, df8x), axis=1, index=False) # First 1000 studies
 
     print("Length of df_x: " + str(len(df_x)))
 
@@ -109,7 +109,7 @@ def build_dataframes():
         max_rank = number_of_studies
 
     df1y, df2y, df3y, df4y, df5y, df6y, df7y, df8y = compile_df(min_rank, max_rank)
-    df_y = pd.concat((df1y, df2y, df3y, df4y, df5y, df6y, df7y, df8y), axis=1) # Up to study 2000
+    df_y = pd.concat((df1y, df2y, df3y, df4y, df5y, df6y, df7y, df8y), axis=1, index=False) # Up to study 2000
 
     print("Max rank set to: " + str(max_rank))
     print("Length of df_y: " + str(len(df_y)))
@@ -123,7 +123,7 @@ def build_dataframes():
         max_rank = number_of_studies
 
     df1z, df2z, df3z, df4z, df5z, df6z, df7z, df8z = compile_df(min_rank, max_rank)
-    df_z = pd.concat((df1z, df2z, df3z, df4z, df5z, df6z, df7z, df8z), axis=1) # Up to study 3000
+    df_z = pd.concat((df1z, df2z, df3z, df4z, df5z, df6z, df7z, df8z), axis=1, index=False) # Up to study 3000
 
     print("Max rank set to: " + str(max_rank))
     print("Length of df_z: " + str(len(df_z)))
