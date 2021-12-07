@@ -36,152 +36,152 @@ All data were filtered using the Pandas library (see function `clean_dataframes`
 
 Not all data columns are included in the final Drug Tracker. The following data columns are those scraped using the Python code, or manually curated by the _Spectrum_ newsroom. Some of these columns may appear with spaces (rather than as camelCase) on the Drug Tracker, due to how the data is imported into the web application.
 
-- index: 
-- NCTId: 
-- TrialAcronym: 
-- ArmGroupDescription: 
-ArmGroupInterventionName
-DrugsTested
-OtherDrugNames
-DrugMechanism
-PreviouslyApproved
-ApprovedConditions
-CombinedModality
-PubMedPapers
-ArmGroupLabel
-ArmGroupType
-BriefSummary
-BriefTitle
-CentralContactEMail
-CentralContactName
-CompletionDate
-CompletionDateType
-Condition
-ConditionBrowseLeafAsFound
-ConditionMeshId
-ConditionMeshTerm
-DesignAllocation
-DesignInterventionModel
-DesignMasking
-DesignObservationalModel
-DesignPrimaryPurpose
-DesignWhoMasked
-DetailedDescription
-DispFirstPostDate
-DispFirstPostDateType
-DispFirstSubmitDate
-DispFirstSubmitQCDate
-EligibilityCriteria
-EnrollmentCount
-EnrollmentType
-EventGroupDeathsNumAffected
-EventGroupDeathsNumAtRisk
-EventsFrequencyThreshold
-EventsTimeFrame
-FDAAA801Violation
-Gender
-HealthyVolunteers
-IPDSharing
-InterventionArmGroupLabel
-InterventionDescription
-InterventionName
-InterventionOtherName
-InterventionType
-IsFDARegulatedDrug
-LastKnownStatus
-LastUpdatePostDate
-LastUpdatePostDateType
-LastUpdateSubmitDate
-LeadSponsorClass
-LeadSponsorName
-LocationCity
-LocationContactEMail
-LocationContactName
-LocationCountry
-LocationFacility
-LocationState
-LocationStatus
-MaximumAge
-MinimumAge
-OfficialTitle
-OrgClass
-OrgFullName
-OtherEventStatsNumAffected
-OtherEventStatsNumAtRisk
-OtherEventStatsNumEvents
-OtherEventTerm
-OtherOutcomeDescription
-OtherOutcomeMeasure
-OtherOutcomeTimeFrame
-OutcomeAnalysisCILowerLimit
-OutcomeAnalysisCINumSides
-OutcomeAnalysisCIPctValue
-OutcomeAnalysisCIUpperLimit
-OutcomeAnalysisDispersionType
-OutcomeAnalysisDispersionValue
-OutcomeAnalysisPValue
-OutcomeAnalysisParamType
-OutcomeAnalysisParamValue
-OutcomeAnalysisStatisticalMethod
-OutcomeClassDenomCountValue
-OutcomeDenomCountValue
-OutcomeDenomUnits
-OutcomeGroupDescription
-OutcomeGroupTitle
-OutcomeMeasureDescription
-OutcomeMeasureDispersionType
-OutcomeMeasureParamType
-OutcomeMeasurePopulationDescription
-OutcomeMeasureReportingStatus
-OutcomeMeasureTimeFrame
-OutcomeMeasureTitle
-OutcomeMeasureType
-OutcomeMeasurementValue
-OutcomeMeasureUnitOfMeasure
-OutcomeMeasurementLowerLimit
-OutcomeMeasurementSpread
-OutcomeMeasurementUpperLimit
-OverallOfficialAffiliation
-OverallStatus
-OversightHasDMC
-Phase
-PrimaryCompletionDate
-PrimaryCompletionDateType
-PrimaryOutcomeDescription
-PrimaryOutcomeMeasure
-PrimaryOutcomeTimeFrame
-ReferenceCitation
-ReferencePMID
-ResponsiblePartyInvestigatorAffiliation
-ResponsiblePartyInvestigatorFullName
-ResponsiblePartyInvestigatorTitle
-ResponsiblePartyType
-ResultsFirstPostDate
-ResultsFirstPostDateType
-ResultsFirstSubmitDate
-ResultsFirstSubmitQCDate
-SecondaryOutcomeDescription
-SecondaryOutcomeMeasure
-SecondaryOutcomeTimeFrame
-SeriousEventAssessmentType
-SeriousEventNotes
-SeriousEventStatsNumAffected
-SeriousEventStatsNumAtRisk
-SeriousEventStatsNumEvents
-SeriousEventTerm
-StartDate
-StartDateType
-StatusVerifiedDate
-StdAge
-StudyFirstPostDate
-StudyFirstPostDateType
-StudyFirstSubmitDate
-StudyFirstSubmitQCDate
-StudyPopulation
-StudyType
-VersionHolder
-WhyStopped
-Placebo - programmatically determined, using Pandas, by 
+- `index`: A unique value for each trial, based on number of trials returned in the search (automated).
+- `NCTId`: A unique value assigned to each clinical trial when it is added to the FDA database. Append an NCTId to the end of `https://clinicaltrials.gov/ct2/show/` to view its data (automated).
+- `TrialAcronym`: An acronym for the clinical trial, if specified (automated).
+- `ArmGroupDescription`: A verbose explanation of each arm in the trial; describes which drugs were given and at which doses (automated).
+- `ArmGroupInterventionName`: Lists the drugs used in the trial, and placebo, if indicated (automated).
+- `DrugsTested`: Data derived from `ArmGroupInterventionName`; lists solely the experimental drugs tested for each trial, separated by a '|' character (manual).
+- `OtherDrugNames`: Other names for the drugs listed in `DrugsTested`. Typically derived from a simple Google search term (manual).
+- `DrugMechanism`:
+- PreviouslyApproved
+- ApprovedConditions
+- CombinedModality
+- PubMedPapers
+- ArmGroupLabel
+- ArmGroupType
+- BriefSummary
+- BriefTitle
+- CentralContactEMail
+- CentralContactName
+- CompletionDate
+- CompletionDateType
+- Condition
+- ConditionBrowseLeafAsFound
+- ConditionMeshId
+- ConditionMeshTerm
+- DesignAllocation
+- DesignInterventionModel
+- DesignMasking
+- DesignObservationalModel
+- DesignPrimaryPurpose
+- DesignWhoMasked
+- DetailedDescription
+- DispFirstPostDate
+- DispFirstPostDateType
+- DispFirstSubmitDate
+- DispFirstSubmitQCDate
+- EligibilityCriteria
+- EnrollmentCount
+- EnrollmentType
+- EventGroupDeathsNumAffected
+- EventGroupDeathsNumAtRisk
+- EventsFrequencyThreshold
+- EventsTimeFrame
+- FDAAA801Violation
+- Gender
+- HealthyVolunteers
+- IPDSharing
+- InterventionArmGroupLabel
+- InterventionDescription
+- InterventionName
+- InterventionOtherName
+- InterventionType
+- IsFDARegulatedDrug
+- LastKnownStatus
+- LastUpdatePostDate
+- LastUpdatePostDateType
+- LastUpdateSubmitDate
+- LeadSponsorClass
+- LeadSponsorName
+- LocationCity
+- LocationContactEMail
+- LocationContactName
+- LocationCountry
+- LocationFacility
+- LocationState
+- LocationStatus
+- MaximumAge
+- MinimumAge
+- OfficialTitle
+- OrgClass
+- OrgFullName
+- OtherEventStatsNumAffected
+- OtherEventStatsNumAtRisk
+- OtherEventStatsNumEvents
+- OtherEventTerm
+- OtherOutcomeDescription
+- OtherOutcomeMeasure
+- OtherOutcomeTimeFrame
+- OutcomeAnalysisCILowerLimit
+- OutcomeAnalysisCINumSides
+- OutcomeAnalysisCIPctValue
+- OutcomeAnalysisCIUpperLimit
+- OutcomeAnalysisDispersionType
+- OutcomeAnalysisDispersionValue
+- OutcomeAnalysisPValue
+- OutcomeAnalysisParamType
+- OutcomeAnalysisParamValue
+- OutcomeAnalysisStatisticalMethod
+- OutcomeClassDenomCountValue
+- OutcomeDenomCountValue
+- OutcomeDenomUnits
+- OutcomeGroupDescription
+- OutcomeGroupTitle
+- OutcomeMeasureDescription
+- OutcomeMeasureDispersionType
+- OutcomeMeasureParamType
+- OutcomeMeasurePopulationDescription
+- OutcomeMeasureReportingStatus
+- OutcomeMeasureTimeFrame
+- OutcomeMeasureTitle
+- OutcomeMeasureType
+- OutcomeMeasurementValue
+- OutcomeMeasureUnitOfMeasure
+- OutcomeMeasurementLowerLimit
+- OutcomeMeasurementSpread
+- OutcomeMeasurementUpperLimit
+- OverallOfficialAffiliation
+- OverallStatus
+- OversightHasDMC
+- Phase
+- PrimaryCompletionDate
+- PrimaryCompletionDateType
+- PrimaryOutcomeDescription
+- PrimaryOutcomeMeasure
+- PrimaryOutcomeTimeFrame
+- ReferenceCitation
+- ReferencePMID
+- ResponsiblePartyInvestigatorAffiliation
+- ResponsiblePartyInvestigatorFullName
+- ResponsiblePartyInvestigatorTitle
+- ResponsiblePartyType
+- ResultsFirstPostDate
+- ResultsFirstPostDateType
+- ResultsFirstSubmitDate
+- ResultsFirstSubmitQCDate
+- SecondaryOutcomeDescription
+- SecondaryOutcomeMeasure
+- SecondaryOutcomeTimeFrame
+- SeriousEventAssessmentType
+- SeriousEventNotes
+- SeriousEventStatsNumAffected
+- SeriousEventStatsNumAtRisk
+- SeriousEventStatsNumEvents
+- SeriousEventTerm
+- StartDate
+- StartDateType
+- StatusVerifiedDate
+- StdAge
+- StudyFirstPostDate
+- StudyFirstPostDateType
+- StudyFirstSubmitDate
+- StudyFirstSubmitQCDate
+- StudyPopulation
+- StudyType
+- VersionHolder
+- WhyStopped
+- Placebo: programmatically determined, using Pandas, by 
 
  (automated)
  (manually added)
