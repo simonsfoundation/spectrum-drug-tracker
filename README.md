@@ -36,10 +36,10 @@ All data were filtered using the Pandas library (see function `clean_dataframes`
 
 Not all data columns are included in the final Drug Tracker. The following data columns are those scraped using the Python code, or manually curated by the _Spectrum_ newsroom. Some of these columns may appear with spaces (rather than as camelCase) on the Drug Tracker, due to how the data is imported into the web application.
 
-index
-NCTId
-TrialAcronym
-ArmGroupDescription
+- index: 
+- NCTId: 
+- TrialAcronym: 
+- ArmGroupDescription: 
 ArmGroupInterventionName
 DrugsTested
 OtherDrugNames
