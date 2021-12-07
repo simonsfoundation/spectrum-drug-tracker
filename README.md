@@ -42,31 +42,32 @@ Not all data columns are included in the final Drug Tracker. The following data 
 - `ArmGroupDescription`: A verbose explanation of each arm in the trial; describes which drugs were given and at which doses (automated).
 - `ArmGroupInterventionName`: Lists the drugs used in the trial, and placebo, if indicated (automated).
 - `DrugsTested`: Data derived from `ArmGroupInterventionName`; lists solely the experimental drugs tested for each trial, separated by a '|' character (manual).
-- `OtherDrugNames`: Other names for the drugs listed in `DrugsTested`. Typically derived from a simple Google search term (manual).
-- `DrugMechanism`:
-- PreviouslyApproved
-- ApprovedConditions
-- CombinedModality
-- PubMedPapers
-- ArmGroupLabel
-- ArmGroupType
-- BriefSummary
-- BriefTitle
-- CentralContactEMail
-- CentralContactName
-- CompletionDate
-- CompletionDateType
-- Condition
-- ConditionBrowseLeafAsFound
-- ConditionMeshId
-- ConditionMeshTerm
-- DesignAllocation
-- DesignInterventionModel
-- DesignMasking
-- DesignObservationalModel
-- DesignPrimaryPurpose
-- DesignWhoMasked
-- DetailedDescription
+- `OtherDrugNames`: Other names for the drugs listed in `DrugsTested`. Typically derived from a simple Google search term. Values for each drug are separated by a '|' character (manual).
+- `DrugMechanism`: Curated description describing the biological mechanism by which the drug is thought to act on the human body (manual).
+- `Sources`: A list of prior Spectrum articles regarding the clinical trial (manual).
+- `PreviouslyApproved`: Whether each drug has been approved by the FDA, for any condition. Typically derived from a simple Google search. Marked as 'Yes' or 'No' for each drug, separated by a '|' character (manual).
+- `ApprovedConditions`: If marked as 'Yes' in `PreviouslyApproved`, lists conditions for which the drug was approved. Values may not be exhaustive (manual).
+- `CombinedModality`: Whether the trial employed multiple modalities (e.g. combined a drug and a behavioral intervention for an intervention arm, or mixed drugs). Possible values are 'Yes', 'No' and 'Combined drugs' (manual).
+- `PubMedPapers`: DOI links to papers, listed on PubMed, based on an input `NCTId` (manual).
+- `ArmGroupLabel`: Brief descriptions of each arm in the trial (automated).
+- `ArmGroupType`: Brief descriptors for each arm in the trial, such as 'Placebo' or 'Experimental' interventions (automated).
+- `BriefSummary`: A brief summary of the clinical trial, provided by the trial authors (automated).
+- `BriefTitle`: A brief title of the clinical trial, provided by the trial authors (automated).
+- `CentralContactEMail`: An email address for the clinical trial's leader, if provided (automated).
+- `CentralContactName`: The name of the clinical trial's lead author, if provided (automated).
+- `CompletionDate`: The actual or estimated completion date for the clinical trial. See also `CompletionDateType` (automated).
+- `CompletionDateType`: Whether the `CompletionDate` provided is the actual or estimated end date (automated).
+- `Condition`: The conditions that the clinical trial is intended to treat. Derived from `ConditionBrowseLeafAsFound`, consolidated to a single value (manual).
+- `ConditionBrowseLeafAsFound`: The conditions that the clinical trial is intended to treat, provided as a list of values separated by a '|' character (automated).
+- `ConditionMeshId`: A unique ID for each value listed in `ConditionBrowseLeafAsFound`; largely deprecated and replaced with ICD-10 values (automated).
+- `ConditionMeshTerm`: A standardized 'Mesh' term for each value listed in `ConditionBrowseLeafAsFound` (automated).
+- `DesignAllocation`: Whether the study was 'Randomized' or 'Non-randomized' (automated).
+- `DesignInterventionModel`: The general design of the strategy for assigning interventions to participants in a clinical study. Types of intervention models include: single group assignment, parallel assignment, cross-over assignment, and factorial assignment. [See link for more details](https://clinicaltrials.gov/ct2/about-studies/glossary) (automated).
+- `DesignMasking`: A clinical trial design strategy in which one or more parties involved in the trial, such as the investigator or participants, do not know which participants have been assigned which interventions. Types of masking include: open label, single blind masking, and double-blind masking. [See link for more details](https://clinicaltrials.gov/ct2/about-studies/glossary) (automated).
+- `DesignObservationalModel`: N/A
+- `DesignPrimaryPurpose`: The intended goal of the clinical trial; this is 'Treatment' or 'Prevention', largely (automated).
+- `DesignWhoMasked`: The parties who were masked to who received the intervention or placebo; values are separated by a '| character (automated).
+- `DetailedDescription`: An extended description of the clinical trial; see also `BriefSummary` (automated).
 - DispFirstPostDate
 - DispFirstPostDateType
 - DispFirstSubmitDate
