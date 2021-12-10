@@ -67,7 +67,7 @@ Not all data columns are included in the final Drug Tracker. The following data 
 - `DetailedDescription`: An extended description of the clinical trial; see also `BriefSummary` (automated).
 - `EligibilityCriteria`: The criteria, used by the trial sponsor, to determine which participants can enroll (automated).
 - `EnrollmentCount`: The number of participants enrolled in the trial (automated).
-- `EnrollmentType`:
+- `EnrollmentType`: 
 - `Gender`: The gender of trial participants; 'Male', 'Female', or 'All' (automated).
 - `HealthyVolunteers`: 
 - `IPDSharing`:
