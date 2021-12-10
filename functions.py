@@ -30,7 +30,7 @@ OversightHasDMC,Phase,PrimaryCompletionDate,PrimaryCompletionDateType,PrimaryOut
 ReferenceCitation,ResponsiblePartyType,
 ResultsFirstPostDate""").replace(',','%2C')
 
-search_fields_4 = ("""ResultsFirstPostDateType,ResultsFirstSubmitDate,ResultsFirstSubmitQCDate,SecondaryOutcomeDescription,SecondaryOutcomeMeasure,
+search_fields_4 = ("""ResultsFirstPostDateType,ResultsFirstSubmitDate,ResultsFirstSubmitQCDate,SecondaryOutcomeDescription,SecondaryOutcomeMeasure,SecondaryOutcomeTimeFrame,
 StartDate,StartDateType,StatusVerifiedDate,StdAge,StudyFirstPostDate,StudyFirstPostDateType,StudyFirstSubmitDate,StudyFirstSubmitQCDate,StudyType,VersionHolder,WhyStopped""").replace(',','%2C')
 
 # Set headers and format_type. CSV is used here. 
