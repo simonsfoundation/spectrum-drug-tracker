@@ -19,10 +19,10 @@ search_terms = """autism+OR+autism+spectrum+disorder+OR+Fragile+X+OR+Rett+syndro
                 Praeder+Willi+syndrome+OR+Phelan+McDermid+syndrome+OR+Dup15q+OR+Angelman+OR+Timothy+syndrome+OR+16p+deletion+OR+16p+duplication"""
 
 search_fields_1 = ("""NCTId,Acronym,ArmGroupDescription,ArmGroupInterventionName,ArmGroupLabel,ArmGroupType,BriefSummary,BriefTitle,CentralContactEMail,CentralContactName,
-CompletionDate,CompletionDateType,Condition,DesignAllocation,DesignInterventionModel,DesignMasking,DesignPrimaryPurpose,DesignWhoMasked""").replace(',','%2C')
+CompletionDate,CompletionDateType,Condition,ConditionBrowseLeafAsFound,DesignAllocation,DesignInterventionModel,DesignMasking,DesignPrimaryPurpose,DesignWhoMasked""").replace(',','%2C')
 
 search_fields_2 = ("""DetailedDescription,EligibilityCriteria,EnrollmentCount,EnrollmentType,Gender,HealthyVolunteers,
-IPDSharing,InterventionArmGroupLabel,InterventionDescription,InterventionName,LastUpdatePostDate,LastUpdatePostDateType,LastUpdateSubmitDate,
+IPDSharing,InterventionArmGroupLabel,InterventionDescription,InterventionName,InterventionType,LastUpdatePostDate,LastUpdatePostDateType,LastUpdateSubmitDate,
 LeadSponsorClass,LeadSponsorName,LocationCity,LocationCountry,LocationFacility""").replace(',','%2C')
 
 search_fields_3 = ("""LocationState,MaximumAge,MinimumAge,OfficialTitle,OrgFullName,OverallOfficialAffiliation,OverallStatus,
@@ -71,7 +71,7 @@ def compile_df(min_rank, max_rank):
 
     return df1, df2, df3, df4
 
-def build_dataframes(headers):
+def build_dataframes():
     """
     This function determines the number of trials, based on a 'test request' and then executes compile_dataframes iteratively. 
     
@@ -94,7 +94,7 @@ def build_dataframes(headers):
     print("Max rank set to: " + str(max_rank))
 
     df1x, df2x, df3x, df4x = compile_df(min_rank, max_rank)
-    df_x = pd.concat((df1x, df2x, df3x, df4x), axis=1, index=False) # First 1000 studies
+    df_x = pd.concat((df1x, df2x, df3x, df4x), axis=1, ignore_index=False) # First 1000 studies
 
     print("Length of df_x: " + str(len(df_x)))
 
@@ -106,7 +106,7 @@ def build_dataframes(headers):
         max_rank = number_of_studies
 
     df1y, df2y, df3y, df4y = compile_df(min_rank, max_rank)
-    df_y = pd.concat((df1y, df2y, df3y, df4y), axis=1, index=False) # Up to study 2000
+    df_y = pd.concat((df1y, df2y, df3y, df4y), axis=1, ignore_index=False) # Up to study 2000
 
     print("Max rank set to: " + str(max_rank))
     print("Length of df_y: " + str(len(df_y)))
@@ -120,7 +120,7 @@ def build_dataframes(headers):
         max_rank = number_of_studies
 
     df1z, df2z, df3z, df4z = compile_df(min_rank, max_rank)
-    df_z = pd.concat((df1z, df2z, df3z, df4z), axis=1, index=False) # Up to study 3000
+    df_z = pd.concat((df1z, df2z, df3z, df4z), axis=1, ignore_index=False) # Up to study 3000
 
     print("Max rank set to: " + str(max_rank))
     print("Length of df_z: " + str(len(df_z)))
@@ -149,7 +149,7 @@ def clean_dataframes(df):
 
     # Perform extra filtering, as some trials appear for certain lymphomas, etc. 
     targets = ['Autis', 'autis', 'Rett', 'Angelman', 'uberous', 'Phelan', '15q', 'Fragile X', 'Asperger', 'Williams', 'Pervasive Developmental Disorder']
-    extra_filter_mask = df_phase_drugs['ConditionBrowseLeafAsFound'].str.contains('Autis|autis|Rett|Angelman|uberous|Phelan|15q|Fragile X|Asperger|Williams|Pervasive Developmental Disorder', regex=True, na=False)
+    extra_filter_mask = df_phase_drugs['ConditionBrowseLeafAsFound'].str.contains('Autis|autis|Rett|Angelman|uberous|Phelan|15q|Fragile X|Asperger|Williams|Pervasive Developmental Disorder|16p', regex=True, na=False)
     s = pd.Series(extra_filter_mask)
     df_phase_drugs_extra_filter = df_phase_drugs[s.values]
 

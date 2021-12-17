@@ -15,7 +15,7 @@ from datetime import datetime as dt
 COLLECTING DATES
 '''
 # Enter the 'prior script execution' date in YYYYMMDD format. 
-prior_date = str(20211108)
+prior_date = str(20211109)
 
 # Collect today's date. 
 current_date = dt.today().strftime('%-d-%b-%y')
@@ -40,23 +40,21 @@ df_new = clean_dataframes(df)
 # Export all filtered trials; useful if you're not looking solely for 'updated' or 'new' trials since last script execution.
 df_new.to_csv(f'datasets/{str(current_date_formatted)}_drug_trials_filtered.csv')
 
-# Read in the previous DataFrame. 
-df_old = pd.read_csv(f'./datasets/{prior_date}_drug_trials_master.csv')
-
-# Identify new studies, based on NCTId column. 
+'''
+Read in the previous DataFrame and identify only studies between 'prior_date' and 'current_date'.
+MODIFY SCRIPT / DATASET LOCATIONS PRIOR TO EXECUTING
+'''
+df_old = pd.read_csv(f'./datasets/November_2021/{prior_date}_drug_trials_filtered.csv')
 df_new_NCTIds = df_new[~df_new['NCTId'].isin(df_old['NCTId'])]
-
-# Find studies that have been updated, using the df_new database and date ranges. 
 df_new['LastUpdatePostDate'] = df_new['LastUpdatePostDate'].astype('datetime64[ns]')
 old_date = dt.strptime(prior_date, '%Y%m%d').strftime('%-d-%b-%y')
-
 date_mask = df_new['LastUpdatePostDate'] > old_date
 df_updated_trials = df_new.loc[date_mask]
 print(f"The length of df_updated_trials is: {len(df_updated_trials)}")
 print(f"The length of df_new_NCTIds is: {len(df_new_NCTIds)}")
 
 '''
-EXPORT FINAL CSV
+EXPORT FINAL CSV (Updated trials only)
 '''
 df_updated_trials.to_csv(f'./datasets/{current_date_formatted}_updated_trials.csv', encoding='utf-8')
 df_new_NCTIds.to_csv(f'./datasets/{current_date_formatted}_new_trials.csv', encoding='utf-8')
