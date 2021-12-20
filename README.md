@@ -3,7 +3,9 @@ A collection of Python scripts to query the FDA's clinical trials API and filter
 
 View _Spectrum's_ interactive [Autism Drug Tracker]().
 
-View the [ObservableHQ notebook](https://observablehq.com/@spectrumnews/drugtracker) that powers the Drug Tracker.
+View the [ObservableHQ notebook](https://observablehq.com/@spectrumnews/drugtracker) that powers the drug tracker.
+
+Download the full, [curated dataset](https://docs.google.com/spreadsheets/d/e/2PACX-1vRIG5TIZjNrkf6SbEI7_bFYniNdqIv559yKzDMCpTPiDf4R9Real4p6HlqpdA3qwavnFNKiApMCGvrG/pub?gid=0&single=true&output=csv) used in the drug tracker.
 
 ## How to use this code
 
@@ -43,7 +45,7 @@ Not all data columns are included in the final Drug Tracker. The following data 
 - `ArmGroupInterventionName`: Lists the drugs used in the trial, and placebo, if indicated (automated).
 - `DrugsTested`: Data derived from `ArmGroupInterventionName`; lists solely the experimental drugs tested for each trial, separated by a '|' character (manual).
 - `OtherDrugNames`: Other names for the drugs listed in `DrugsTested`. Typically derived from a simple Google search term. Values for each drug are separated by a '|' character (manual).
-- `DrugMechanism`: Curated description describing the biological mechanism by which the drug is thought to act on the human body (manual).
+- `DrugDescription`: Curated description describing the biological mechanism by which the drug is thought to act on the human body. This column is editorial in nature, and thus often combines perceived drug mechanisms with editorial opinion (manual).
 - `SpectrumCoverage`: A list of prior Spectrum articles regarding the clinical trial, where available (manual).
 - `PreviouslyApproved`: Whether each drug has been approved by the FDA, for any condition. Typically derived from a simple Google search. Marked as 'Yes' or 'No' for each drug, separated by a '|' character (manual).
 - `ApprovedConditions`: If marked as 'Yes' in `PreviouslyApproved`, lists conditions for which the drug was approved. Values may not be exhaustive (manual).
