@@ -1,4 +1,7 @@
 # Spectrum Drug Tracker
+
+## By: Niko McCarty (niko@spectrumnews.org)
+
 A collection of Python scripts to query the FDA's clinical trials API and filter the data specifically for autism and autism-related conditions.
 
 View _Spectrum's_ interactive [Autism Drug Tracker]().
