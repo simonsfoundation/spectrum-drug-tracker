@@ -7,17 +7,18 @@ import requests
 import re
 import io
 import time
-import csv
+# import csv
 from datetime import datetime as dt
 
 
 '''
 STUDY FIELDS TO QUERY
 '''
-# Set a search expression, spaces are denoted as '+', but Boolean logic can still be used. 
+# Set a search expression. Spaces are denoted as '+'. Boolean logic applies. 
 search_terms = """autism+OR+autism+spectrum+disorder+OR+Fragile+X+OR+Rett+syndrome+OR+tuberous+sclerosis+OR+Williams+syndrome+OR+
                 Praeder+Willi+syndrome+OR+Phelan+McDermid+syndrome+OR+Dup15q+OR+Angelman+OR+Timothy+syndrome+OR+16p+deletion+OR+16p+duplication"""
 
+# Set study fields to query in the FDA's API. Each of these fields is a column in the final DataFrame.
 search_fields_1 = ("""NCTId,Acronym,ArmGroupDescription,ArmGroupInterventionName,ArmGroupLabel,ArmGroupType,BriefSummary,BriefTitle,CentralContactEMail,CentralContactName,
 CompletionDate,CompletionDateType,Condition,ConditionBrowseLeafAsFound,DesignAllocation,DesignInterventionModel,DesignMasking,DesignPrimaryPurpose,DesignWhoMasked""").replace(',','%2C')
 
@@ -33,7 +34,7 @@ ResultsFirstPostDate""").replace(',','%2C')
 search_fields_4 = ("""ResultsFirstPostDateType,ResultsFirstSubmitDate,ResultsFirstSubmitQCDate,SecondaryOutcomeDescription,SecondaryOutcomeMeasure,SecondaryOutcomeTimeFrame,
 StartDate,StartDateType,StatusVerifiedDate,StdAge,StudyFirstPostDate,StudyFirstPostDateType,StudyFirstSubmitDate,StudyFirstSubmitQCDate,StudyType,VersionHolder,WhyStopped""").replace(',','%2C')
 
-# Set headers and format_type. CSV is used here. 
+# Set headers and format_type. CSV is used here, but could be changed to json. 
 headers = {"User-Agent": "Mozilla/5.0 (X11; CrOS x86_64 12871.102.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.141 Safari/537.36"}
 format_type = 'csv'
 
@@ -46,9 +47,9 @@ def compile_df(min_rank, max_rank):
     This function executes the requests to the clinical trials API. It assembles the 'URLs' to query, saves requests to variables, 
     and then builds dataframes to store the data. The FDA's API is limited in several respects; one can only query 20 study fields at a time. 
     Additionally, one can only pull data on 1000 trials per request. Thus, DataFrames are concatenated in both dimensions to assemble the final
-    unfiltered dataset, which contains more than 3000 trials and has more than 80 columns. 
+    unfiltered dataset. 
 
-    Returns 8 DataFrames. 
+    Returns 4 DataFrames; one for each 'search_fields' string. 
     """
     base_url_1 = f"https://clinicaltrials.gov/api/query/study_fields?expr={search_terms}&fields={search_fields_1}&min_rnk={min_rank}&max_rnk={max_rank}&fmt={format_type}"
     base_url_2 = f"https://clinicaltrials.gov/api/query/study_fields?expr={search_terms}&fields={search_fields_2}&min_rnk={min_rank}&max_rnk={max_rank}&fmt={format_type}"
@@ -131,6 +132,7 @@ def clean_dataframes(df):
     """
     This function takes a DataFrame as input and cleans the data. Specifically, it returns only trials that are Phase II+, 
     that include Drugs as the intervention (not behavioral interventions), and that contain details on one of the queried conditions. 
+    
     It also creates a 'Placebo' column, based on text in the 'ArmGroupInterventionName' column. 
     
     Returns 1 DataFrame. 
