@@ -42,13 +42,16 @@ df_new = clean_dataframes(df)
 # Export all filtered trials; useful if you're not looking solely for 'updated' or 'new' trials since last script execution.
 df_new.to_csv(f'datasets/{str(current_date_formatted)}_drug_trials_filtered.csv')
 
-
 '''
 Read in the previous DataFrame and identify only studies between 'prior_date' and 'current_date'.
 '''
 # IMPORTANT! EDIT FILE PATH PRIOR TO EXECUTING. 
-df_old = pd.read_csv(f'./datasets/December_2021/{prior_date}_drug_trials_filtered.csv')
-df_new_NCTIds = df_new[~df_new['NCTId'].isin(df_old['NCTId'])]
+current_data = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRIG5TIZjNrkf6SbEI7_bFYniNdqIv559yKzDMCpTPiDf4R9Real4p6HlqpdA3qwavnFNKiApMCGvrG/pub?gid=0&single=true&output=csv"
+
+df_current = pd.read_csv(current_data)
+
+# df_old = pd.read_csv(f'./datasets/December_2021/{prior_date}_drug_trials_filtered.csv')
+df_new_NCTIds = df_new[~df_new['NCTId'].isin(df_current['NCTId'])]
 df_new['LastUpdatePostDate'] = df_new['LastUpdatePostDate'].astype('datetime64[ns]')
 old_date = dt.strptime(prior_date, '%Y%m%d').strftime('%d-%b-%y')
 date_mask = df_new['LastUpdatePostDate'] > old_date

@@ -137,7 +137,7 @@ def clean_dataframes(df):
     
     Returns 1 DataFrame. 
     """
-    # First, remove all trials that do not have a 'Phase' explicitly listed 
+    # Remove all trials that do not have a 'Phase' explicitly listed 
     df_phase = df[df['Phase'].notna()]
 
     # Remove trials that say 'Not Applicable' for Phase data. 
@@ -149,11 +149,14 @@ def clean_dataframes(df):
     # Remove trials that do not include 'drug' as an intervention type 
     df_phase_drugs = df_phase[df_phase['InterventionType'].str.contains("Drug", na=False)]
 
+    # Remove open label / non-placebo trials
+    df_phase_drugs_placebo = df_phase_drugs[~df_phase_drugs['DesignMasking'].str.contains("None", na=False)]
+
     # Perform extra filtering, as some trials appear for certain lymphomas, etc. 
     targets = ['Autis', 'autis', 'Rett', 'Angelman', 'uberous', 'Phelan', '15q', 'Fragile X', 'Asperger', 'Williams', 'Pervasive Developmental Disorder']
-    extra_filter_mask = df_phase_drugs['ConditionBrowseLeafAsFound'].str.contains('Autis|autis|Rett|Angelman|uberous|Phelan|15q|Fragile X|Asperger|Williams|Pervasive Developmental Disorder|16p', regex=True, na=False)
+    extra_filter_mask = df_phase_drugs_placebo['ConditionBrowseLeafAsFound'].str.contains('Autis|autis|Rett|Angelman|uberous|Phelan|15q|Fragile X|Asperger|Williams|Pervasive Developmental Disorder|16p', regex=True, na=False)
     s = pd.Series(extra_filter_mask)
-    df_phase_drugs_extra_filter = df_phase_drugs[s.values]
+    df_phase_drugs_extra_filter = df_phase_drugs_placebo[s.values]
 
     # Populate a placebo column automatically, based solely on ArmGroupInterventionName column (maybe not flawless)
     df_phase_drugs_extra_filter['Placebo'] = df_phase_drugs_extra_filter['ArmGroupInterventionName'].apply(lambda x: 'Yes' if 'Placebo' in str(x) else 'No')
