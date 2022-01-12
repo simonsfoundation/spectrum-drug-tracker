@@ -1,4 +1,4 @@
-# Spectrum Drug Tracker
+# Spectrum Drug Trial Tracker
 
 ## By: Niko McCarty (niko@spectrumnews.org)
 
