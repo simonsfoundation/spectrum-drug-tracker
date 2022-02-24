@@ -80,7 +80,7 @@ def build_dataframes():
     """
 
     test_url = """https://clinicaltrials.gov/api/query/study_fields?expr=autism+OR+autism+spectrum+disorder+OR+Fragile+X+OR+Rett+syndrome+OR+tuberous+sclerosis+OR+Williams+syndrome+OR+
-                Praeder+Willi+syndrome+OR+Phelan+McDermid+syndrome+OR+Dup15q+OR+Angelman+OR+Timothy+syndrome+OR+16p+deletion+OR+16p+duplication&fields=NCTId&min_rnk=1&max_rnk=3&fmt=csv"""
+                Praeder+Willi+syndrome+OR+Phelan+McDermid+syndrome+OR+Dup15q+OR+Angelman+OR+Timothy+syndrome+OR+16p+deletion+OR+16p+duplication+OR+ADNP+OR+&fields=NCTId&min_rnk=1&max_rnk=3&fmt=csv"""
 
     response_test = requests.get(test_url, headers=headers).content.decode('utf-8')
     number_of_studies = int(re.search("(?<=NStudiesFound: )\d\d\d\d", response_test).group(0))
