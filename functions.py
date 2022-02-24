@@ -153,8 +153,8 @@ def clean_dataframes(df):
     df_phase_drugs_placebo = df_phase_drugs[~df_phase_drugs['DesignMasking'].str.contains("None", na=False)]
 
     # Perform extra filtering, as some trials appear for certain lymphomas, etc. 
-    targets = ['Autis', 'autis', 'Rett', 'Angelman', 'uberous', 'Phelan', '15q', 'Fragile X', 'Asperger', 'Williams', 'Pervasive Developmental Disorder']
-    extra_filter_mask = df_phase_drugs_placebo['ConditionBrowseLeafAsFound'].str.contains('Autis|autis|Rett|Angelman|uberous|Phelan|15q|Fragile X|Asperger|Williams|Pervasive Developmental Disorder|16p', regex=True, na=False)
+    targets = ['Autis', 'autis', 'Rett', 'Angelman', 'uberous', 'Phelan', '15q', 'Fragile X', 'Asperger', 'Williams', 'Pervasive Developmental Disorder', 'ADNP']
+    extra_filter_mask = df_phase_drugs_placebo['ConditionBrowseLeafAsFound'].str.contains('Autis|autis|Rett|Angelman|uberous|Phelan|15q|Fragile X|Asperger|Williams|Pervasive Developmental Disorder|16p|ADNP', regex=True, na=False)
     s = pd.Series(extra_filter_mask)
     df_phase_drugs_extra_filter = df_phase_drugs_placebo[s.values]
 
