@@ -36,6 +36,7 @@ The final data included in the _Spectrum_ Drug Tracker only includes Phase 2, 3,
 - Timothy syndrome
 - 16p deletion
 - 16p duplication
+- Activity-Dependent Neuroprotective Protein syndrome (ADNP syndrome)
 
 The FDA's clinical trials database is not exhaustive; the first trials were not posted until September 2008.
 
@@ -131,7 +132,7 @@ Not all data columns are included in the final Drug Tracker. The following data 
 
 Prior to executing this script, change the `prior_date` variable to scrape only those trials that have been updated or altered between the `current_date` and the `prior_date`. To collect all clinical trials, change `prior_date` to some date like 19990101 (format is `YYYYMMDD`).
 
-The script has several dependencies, including Pandas and the `functions.py` file.
+The script has several dependencies, including [Pandas](https://pandas.pydata.org/) and the `functions.py` file.
 
 `functions.py`:
 Functions that are necessary for the `nct_scraper.py` file to execute. The code was written in an admittedly strange way due to limitations of the API; only 1000 trials can be scraped at once, and only 20 fields can be queried at a time. Thus, the first function iterates through and concatenates Pandas DataFrames together to build the complete list of clinical trials.
