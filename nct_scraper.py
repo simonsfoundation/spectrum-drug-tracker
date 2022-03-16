@@ -15,7 +15,7 @@ from datetime import datetime as dt
 COLLECT DATES
 '''
 # Enter the 'prior script execution' date in YYYYMMDD format. 
-prior_date = str(20220110)
+prior_date = str(20220201)
 
 # Collect today's date. 
 current_date = dt.today().strftime('%d-%b-%y')
