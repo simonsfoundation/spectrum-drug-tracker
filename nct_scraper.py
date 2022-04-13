@@ -4,19 +4,19 @@ IMPORTS
 import numpy as np
 import pandas as pd
 from functions import *
-# import requests
-# import re
-# import io
-# import time
-# import csv
 from datetime import datetime as dt
+
+'''
+ENTER DATA MANUALLY BEFORE EXECUTING SCRIPT
+'''
+# Enter the 'prior script execution' date in YYYYMMDD format. 
+prior_date = str(20220316)
+# Enter the local path to the prior dataset.
+current_data = "./datasets/March_2022/20220316_drug_trials_filtered.csv"
 
 '''
 COLLECT DATES
 '''
-# Enter the 'prior script execution' date in YYYYMMDD format. 
-prior_date = str(20220316)
-
 # Collect today's date. 
 current_date = dt.today().strftime('%d-%b-%y')
 current_date_formatted = dt.strptime(current_date, '%d-%b-%y').strftime('%Y%m%d')
@@ -30,7 +30,6 @@ df = build_dataframes()
 # Create an unfiltered .csv file. Export it to the datasets folder.
 df.to_csv(f'datasets/{str(current_date_formatted)}_drug_trials_unfiltered.csv')
 
-
 '''
 DATA FILTERING
 '''
@@ -42,8 +41,7 @@ df_new.to_csv(f'datasets/{str(current_date_formatted)}_drug_trials_filtered.csv'
 '''
 Read in the previous DataFrame and identify only studies between 'prior_date' and 'current_date'.
 '''
-# Read in the old dataset to compare the new data changes. We cannot use the Google Doc, because those data are selectively updated. Use the old, filtered data.
-current_data = "./datasets/20220316_drug_trials_filtered.csv"
+# UPDATE THESE DATA. Read in the old dataset to compare the new data changes. We cannot use the Google Doc, because those data are selectively updated. Use the old, filtered data.
 df_current = pd.read_csv(current_data)
 
 # df_old = pd.read_csv(f'./datasets/December_2021/{prior_date}_drug_trials_filtered.csv')
@@ -55,7 +53,6 @@ df_updated_trials = df_new.loc[date_mask]
 
 print(f"There are {len(df_updated_trials)} updated trials.")
 print(f"There are {len(df_new_NCTIds)} new trials.")
-
 
 '''
 Export final .csv files (New and updated trials only)
