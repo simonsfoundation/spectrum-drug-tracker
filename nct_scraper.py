@@ -26,9 +26,7 @@ print(f"The date today is: {str(current_date)}")
 '''
 SCRAPE DATA
 '''
-df_x, df_y, df_z = build_dataframes()
-df = pd.concat([df_x, df_y, df_z], sort=False)
-df.reset_index(inplace=True)
+df = build_dataframes()
 
 # Create an unfiltered .csv file. Export it to the datasets folder.
 df.to_csv(f'datasets/{str(current_date_formatted)}_drug_trials_unfiltered.csv')
