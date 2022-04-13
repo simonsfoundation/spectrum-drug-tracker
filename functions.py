@@ -82,9 +82,14 @@ def compile_df(min_rank, max_rank):
 
 def build_dataframes():
     """
-    This function determines the number of trials, based on a 'test request' and then executes compile_dataframes iteratively. 
-    
-    Returns three DataFrames. 
+    This function determines the number of trials, based on a 'test request,' and then executes the compile_dataframes function in an iterative manner. 
+
+    INPUTS:
+    min_rank (int): The first row, in the returned dataset, to query.
+    max_rank (int): The maximum row, in the returned dataset, to query.
+
+    OUTPUTS:
+    df (DataFrame): A single DataFrame containing all rows and columns corresponding to the scraped clinical trial data.
     """
 
     test_url = """https://clinicaltrials.gov/api/query/study_fields?expr=autism+OR+autism+spectrum+disorder+OR+Fragile+X+OR+Rett+syndrome+OR+tuberous+sclerosis+OR+Williams+syndrome+OR+
@@ -134,7 +139,10 @@ def build_dataframes():
     print("Max rank set to: " + str(max_rank))
     print("Length of df_z: " + str(len(df_z)))
 
-    return df_x, df_y, df_z
+    df = pd.concat([df_x, df_y, df_z], sort=False)
+    df.reset_index(inplace=True)
+
+    return df
 
 def clean_dataframes(df):
     """
@@ -142,8 +150,13 @@ def clean_dataframes(df):
     that include Drugs as the intervention (not behavioral interventions), and that contain details on one of the queried conditions. 
     
     It also creates a 'Placebo' column, based on text in the 'ArmGroupInterventionName' column. 
+
+    INPUTS:
+    df (DataFrame): A DataFrame containing the raw clinical trial data scraped from ClinicalTrials.gov.
+
+    OUTPUTS:
+    df_phase_drugs_extra_filter (DataFrame): A single DataFrame containing cleaned data from the input DataFrame.
     
-    Returns 1 DataFrame. 
     """
     # Remove all trials that do not have a 'Phase' explicitly listed 
     df_phase = df[df['Phase'].notna()]
@@ -161,8 +174,7 @@ def clean_dataframes(df):
     df_phase_drugs_placebo = df_phase_drugs[~df_phase_drugs['DesignMasking'].str.contains("None", na=False)]
 
     # Perform extra filtering, as some trials appear for certain lymphomas, etc. 
-    targets = ['Autis', 'autis', 'Rett', 'Angelman', 'uberous', 'Phelan', '15q', 'Fragile X', 'Asperger', 'Williams', 'Pervasive Developmental Disorder', 'ADNP']
-    extra_filter_mask = df_phase_drugs_placebo['ConditionBrowseLeafAsFound'].str.contains('Autis|autis|Rett|Angelman|uberous|Phelan|15q|Fragile X|Asperger|Williams|Pervasive Developmental Disorder|16p|ADNP', regex=True, na=False)
+    extra_filter_mask = df_phase_drugs_placebo['ConditionBrowseLeafAsFound'].str.contains('Autis|autis|Rett|Angelman|Tuberous|sclerosis|Phelan|McDermid|15q|Fragile X|Asperger|Williams|Pervasive Developmental Disorder|16p|ADNP', regex=True, na=False)
     s = pd.Series(extra_filter_mask)
     df_phase_drugs_extra_filter = df_phase_drugs_placebo[s.values]
 
