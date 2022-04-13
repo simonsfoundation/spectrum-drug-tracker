@@ -15,13 +15,12 @@ from datetime import datetime as dt
 COLLECT DATES
 '''
 # Enter the 'prior script execution' date in YYYYMMDD format. 
-prior_date = str(20220201)
+prior_date = str(20220316)
 
 # Collect today's date. 
 current_date = dt.today().strftime('%d-%b-%y')
 current_date_formatted = dt.strptime(current_date, '%d-%b-%y').strftime('%Y%m%d')
 print(f"The date today is: {str(current_date)}")
-
 
 '''
 SCRAPE DATA
@@ -43,9 +42,8 @@ df_new.to_csv(f'datasets/{str(current_date_formatted)}_drug_trials_filtered.csv'
 '''
 Read in the previous DataFrame and identify only studies between 'prior_date' and 'current_date'.
 '''
-# IMPORTANT! EDIT FILE PATH PRIOR TO EXECUTING. 
-current_data = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRIG5TIZjNrkf6SbEI7_bFYniNdqIv559yKzDMCpTPiDf4R9Real4p6HlqpdA3qwavnFNKiApMCGvrG/pub?gid=0&single=true&output=csv"
-
+# Read in the old dataset to compare the new data changes. We cannot use the Google Doc, because those data are selectively updated. Use the old, filtered data.
+current_data = "./datasets/20220316_drug_trials_filtered.csv"
 df_current = pd.read_csv(current_data)
 
 # df_old = pd.read_csv(f'./datasets/December_2021/{prior_date}_drug_trials_filtered.csv')
