@@ -7,13 +7,11 @@ import requests
 import re
 import io
 import time
-# import csv
 from datetime import datetime as dt
 
-
-'''
+"""
 STUDY FIELDS TO QUERY
-'''
+"""
 # Set a search expression. Spaces are denoted as '+'. Boolean logic applies. 
 search_terms = """autism+OR+autism+spectrum+disorder+OR+Fragile+X+OR+Rett+syndrome+OR+tuberous+sclerosis+OR+Williams+syndrome+OR+
                 Praeder+Willi+syndrome+OR+Phelan+McDermid+syndrome+OR+Dup15q+OR+Angelman+OR+Timothy+syndrome+OR+16p+deletion+OR+16p+duplication+OR+ADNP"""
@@ -34,7 +32,7 @@ ResultsFirstPostDate""").replace(',','%2C')
 search_fields_4 = ("""ResultsFirstPostDateType,ResultsFirstSubmitDate,ResultsFirstSubmitQCDate,SecondaryOutcomeDescription,SecondaryOutcomeMeasure,SecondaryOutcomeTimeFrame,
 StartDate,StartDateType,StatusVerifiedDate,StdAge,StudyFirstPostDate,StudyFirstPostDateType,StudyFirstSubmitDate,StudyFirstSubmitQCDate,StudyType,VersionHolder,WhyStopped""").replace(',','%2C')
 
-# Set headers and format_type. CSV is used here, but could be changed to json. 
+# Set headers and format_type. CSV is used here, but this could also be changed to JSON. 
 headers = {"User-Agent": "Mozilla/5.0 (X11; CrOS x86_64 12871.102.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.141 Safari/537.36"}
 format_type = 'csv'
 
@@ -49,13 +47,21 @@ def compile_df(min_rank, max_rank):
     Additionally, one can only pull data on 1000 trials per request. Thus, DataFrames are concatenated in both dimensions to assemble the final
     unfiltered dataset. 
 
-    Returns 4 DataFrames; one for each 'search_fields' string. 
+    INPUTS:
+    min_rank (int): The first row, in the returned dataset, to query.
+    max_rank (int): The maximum row, in the returned dataset, to query.
+
+    OUTPUTS:
+    df1, df2, df3, df4 (df): Four Pandas DataFrames; one for each 'search_fields' string. 
     """
+
+    # Assemble the URLs to query. The Clinical Trials API uses these endpoints, and we just plug in the search_terms, search_fields, and the slice of rows to query. 
     base_url_1 = f"https://clinicaltrials.gov/api/query/study_fields?expr={search_terms}&fields={search_fields_1}&min_rnk={min_rank}&max_rnk={max_rank}&fmt={format_type}"
     base_url_2 = f"https://clinicaltrials.gov/api/query/study_fields?expr={search_terms}&fields={search_fields_2}&min_rnk={min_rank}&max_rnk={max_rank}&fmt={format_type}"
     base_url_3 = f"https://clinicaltrials.gov/api/query/study_fields?expr={search_terms}&fields={search_fields_3}&min_rnk={min_rank}&max_rnk={max_rank}&fmt={format_type}"
     base_url_4 = f"https://clinicaltrials.gov/api/query/study_fields?expr={search_terms}&fields={search_fields_4}&min_rnk={min_rank}&max_rnk={max_rank}&fmt={format_type}"
 
+    # Use requests to get each of the URLs, and save the returned data to a set of four variables, one for each search_terms string.
     response_1 = requests.get(base_url_1, headers=headers).content
     time.sleep(3)
     response_2 = requests.get(base_url_2, headers=headers).content
@@ -65,11 +71,13 @@ def compile_df(min_rank, max_rank):
     response_4 = requests.get(base_url_4, headers=headers).content
     time.sleep(3)
 
+    # Build the Pandas DataFrames from the returned data.
     df1 = pd.read_csv(io.StringIO(response_1.decode('utf-8')), skiprows=10)
     df2 = pd.read_csv(io.StringIO(response_2.decode('utf-8')), skiprows=10)
     df3 = pd.read_csv(io.StringIO(response_3.decode('utf-8')), skiprows=10)
     df4 = pd.read_csv(io.StringIO(response_4.decode('utf-8')), skiprows=10)
 
+    # Return the DataFrames.
     return df1, df2, df3, df4
 
 def build_dataframes():
