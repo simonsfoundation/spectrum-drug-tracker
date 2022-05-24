@@ -10,9 +10,9 @@ from datetime import datetime as dt
 ENTER DATA MANUALLY BEFORE EXECUTING SCRIPT
 '''
 # Enter the 'prior script execution' date in YYYYMMDD format. 
-prior_date = str(20220316)
+prior_date = str(20220413)
 # Enter the local path to the prior dataset.
-current_data = "./datasets/March_2022/20220316_drug_trials_filtered.csv"
+current_data = "./datasets/April_2022/20220413_drug_trials_filtered.csv"
 
 '''
 COLLECT DATES
